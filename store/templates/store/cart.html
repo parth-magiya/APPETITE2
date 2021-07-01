@@ -1,0 +1,64 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="box-element">
+
+<!-- Continue Shopping Button -->	
+				<a  class="btn btn-outline-dark" href="{% url 'store' %}"> &#10094; Continue Shopping</a>
+
+<!-- Checkout Button -->	
+				<br>
+				<br>
+				<table class="table">
+					<th>
+						<a  style=" float:right; margin: 10px; padding: 8px 35px; margin-bottom: 0" class="btn btn-warning" href="{% url 'checkout' %}">Checkout</a>
+					</th>
+				</table>
+				
+			</div>
+
+<!-- Order Detials -->	
+			<br>
+			<div class="box-element">
+				<div class="cart-row">
+					<div style="flex:2"></div>
+					<div style="flex:2"><strong>Item</strong></div>
+					<div style="flex:1"><strong>Price</strong></div>
+					<div style="flex:1"><strong>Quantity</strong></div>
+					<div style="flex:1"><strong>Total</strong></div>
+				</div>
+				
+				{% for item in items %}
+				<div class="cart-row">
+					<div style="flex:2"><img class="row-image" src="{{item.product.imageURL}}"></div> <!-- Product image Rendering for cart -->
+					<div style="flex:2"><p>{{item.product.name}}</p></div> <!-- Product name Rendering for cart -->
+					<div style="flex:1"><p>Rs.{{item.product.price|floatformat:2}}</p></div> <!-- Product price Rendering for cart -->
+					<div style="flex:1"><p class="quantity">{{item.quantity}}</p> <!-- These will Render Quantity number of product in cart -->
+						<div class="quantity">
+							<img data-product={{item.product.id}} data-action="add" class="chg-quantity update-cart" src="{% static  'images/arrow-up.png' %}"> <!-- These will render updated quantity in cart (ADD) -->
+					
+							<img data-product={{item.product.id}} data-action="remove" class="chg-quantity update-cart" src="{% static  'images/arrow-down.png' %}"> <!--These will render updated quantity in cart (REMOVE) -->
+						</div>
+					</div>
+					<div style="flex:1"><p>Rs.{{item.get_total}}</p></div> <!-- These will Render Total in cart -->
+				 	</div>
+				 	{% endfor %}
+				</div>
+
+					<br>
+
+				<div class="box-element">
+					<ul>
+					<li  style="margin-left:735px; font-size: 20px">
+						<a>Items: <strong>{{order.get_cart_items}}</strong></a>
+					</li>
+					<li style="margin-left: 40px; font-size: 20px">
+						<a>Total: <strong>Rs.{{order.get_cart_total|floatformat:2}}</strong></a>
+					</li>
+				</div>
+			</div>
+		</div>
+	
+{% endblock content %}

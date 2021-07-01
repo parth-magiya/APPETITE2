@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+	    <link rel="stylesheet" href="assets/css/style.css">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare. com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+	    <link rel="preconnect" href="https://fonts.gstatic.com">
+    	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@1,900&display=swap">
+    	<link rel="icon" href="static/images/appetite_icon.png">
+			
+		<title>Appetite</title>
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+		<!-- Viewport meta tag -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+
+    	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+    	<!-- To detect the USER  -->
+    	<script type="text/javascript">
+    		var user = '{{request.user}}'
+
+		/* CSRF TOKEN */
+		function getToken(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = cookies[i].trim();
+
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getToken('csrftoken');
+
+
+
+		function getCookie(name) {
+			//Split cookie string and get all individual name = value pairs in an array
+			var cookieArr = document.cookie.split(";");
+
+			for(var i =0; i < cookieArr.length; i++) {
+				var cookiePair = cookieArr[i].split("=");
+
+			if(name == cookiePair[0].trim()) {
+				//Decode the cookie value and reture
+				return decodeURIComponent(cookiePair[1]);
+			}
+		}
+		//Return null if not found 
+		return null;
+	}
+
+	var cart = JSON.parse(getCookie('cart'))
+	if(cart == undefined){
+		cart = {}
+		console.log('Cart was created!')
+		document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+	}
+
+	console.log('Cart:', cart)
+
+    	</script>
+
+	</head>
+
+<body>
+
+<!-- Navigation Bar (Bootstrap) -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+	  <a class="navbar-brand" href="{% url 'store' %}">
+	  	<h2><img style="vertical-align: 7px" src="static/images/appetite_icon.png" width="48" height="50"><span style="color: #ffffff">App</span><span style="color: #44d43b">etite</span></h2></a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+	  </button>
+
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="navbar-nav mr-auto">
+	      <li class="nav-item active">
+	        <h5><a class="nav-link" href="{% url 'store' %}">⠀Store<span class="sr-only">(current)</span></a></h5>
+	    </li>
+
+	    <li class="nav-item active">
+	        <h5><a class="nav-link" href="{% url 'cart' %}">⠀Cart<span class="sr-only">(current)</span></a></h5>
+	    </li>
+
+	    <li class="nav-item active">
+	        <h5><a class="nav-link" href="{% url 'checkout' %}">⠀Checkout<span class="sr-only">(current)</span></a></h5>
+	    </li>
+
+	    <li class="nav-item active">
+	        <h5><a class="nav-link" href="{% url 'about' %}">⠀About<span class="sr-only">(current)</span></a></h5>
+	    </li>
+
+	    <li class="nav-item active">
+	        <h5><a class="nav-link" href="{% url 'contact' %}">⠀Contact<span class="sr-only">(current)</span></a></h5>
+	    </li>
+		</ul>
+
+<!-- Cart Button (Bootstrap) -->
+	    <div class="form-inline my-2 my-lg-0">
+		<a href="{% url 'cart' %}">
+	    		<button type="button" class="btn btn-dark">
+	                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-cart4" viewBox="5 2 16 16">
+					  <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
+					</svg>Cart⠀</button>
+				</a>
+    		<p id="cart-total"><span>{{cartItems}}</span></p> <!-- CART ITEM TOTAL -->
+   		</div>
+	  </div>
+	</nav>
+
+
+         <div class="container">
+                <br>
+                {% block content %}
+
+                 {% endblock content %}
+         </div>
+
+<br>
+
+<marquee scrollamount="8" style="font-size: 20px;font-weight: 500; font-style: italic; color: #dc3545;" >Order on Appetite, delivery is FREE on every order. So what you waiting for order right now!</marquee>
+
+	<div class="footer-basic">
+        <footer>
+        	<h4 style="margin-top:5px; line-height: 1.8; font-family:'Alegreya', serif;" >get &nbsp; in &nbsp; touch</h4>
+            <div class="social">
+            	<a href="https://www.instagram.com/appetite/" target="_blank" title="Instagram"><i class="fa fa-instagram" id="insta"></i></a>
+            	<a href="#" title="Facebook"><i class="icon ion-social-facebook" style="color: blue"></i></a>
+            	<a href="" title="Twitter"><i class="fa fa-twitter" style="color: cyan"></i></a>
+            	<a href="https://wa.link/28o135" target="_blank" title="Whatsapp"><i class="fa fa-whatsapp" style="color: green"></i></a>
+            </div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="{% url 'store' %}">Home</a></li>
+                <li class="list-inline-item"><a href="{% url 'about' %}">About</a></li>
+                <li class="list-inline-item"><a href="{% url 'contact' %}">Contact</a></li>
+                <li class="list-inline-item"><a href="{% url 't&c' %}">Terms & Conditions</a></li>
+                <li class="list-inline-item"><a href="{% url 'policy' %}">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Appetite India Pvt. Ltd. © 2021. All rights are reserved</p>
+            <p style="text-align: center; color: #fff; font-weight: 500; margin-top:20px; line-height:1.5">
+				<img alt="Visa/Mastercard/Amex/Discover" title="Payment Accepted" src="https://www.shift4shop.com/images/credit-card-logos/cc-sm-4.png" width="198" height="28" border="0">&nbsp;
+				<img src="https://resize.indiatvnews.com/en/resize/newbucket/715_-/2019/08/rupay-card-1566468196.jpg" height="27" style="vertical-align:top;"><br>Payment Accepted</p>
+        </footer>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap Part -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+	<!-- JS part -->
+	<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+
+</body>
+</html>
+
+
+
